@@ -1,6 +1,7 @@
 import { z } from "zod";
+import type { PoolClient } from "pg";
 import { maybeAutoInitSchema, totalPoolMinutes } from "./_lib/state";
-import { pool } from "./_lib/db";
+import { getPool } from "./_lib/db";
 
 const submissionSchema = z.object({
   selectedOptionIds: z.array(z.string().min(1)).min(1),
@@ -33,9 +34,11 @@ export default async function handler(req: any, res: any) {
   const userAgent = req.headers?.["user-agent"] ?? null;
   const ipAddress = getClientIp(req);
 
-  const client = await pool.connect();
+  let client: PoolClient | null = null;
 
   try {
+    const pool = getPool();
+    client = await pool.connect();
     await maybeAutoInitSchema();
     await client.query("BEGIN");
 
@@ -94,8 +97,14 @@ export default async function handler(req: any, res: any) {
       remainingMinutes: nextRemaining,
     });
   } catch (error) {
-    await client.query("ROLLBACK");
+    if (client) {
+      await client.query("ROLLBACK");
+    }
     console.error("Submission transaction failed:", error);
+
+    if (error instanceof Error && /DATABASE_URL is required/i.test(error.message)) {
+      return res.status(500).send("Server database is not configured. Set DATABASE_URL in Vercel environment variables.");
+    }
 
     if (error instanceof Error && /relation .* does not exist/i.test(error.message)) {
       return res
@@ -105,6 +114,8 @@ export default async function handler(req: any, res: any) {
 
     return res.status(500).send("Could not save submission");
   } finally {
-    client.release();
+    if (client) {
+      client.release();
+    }
   }
 }
