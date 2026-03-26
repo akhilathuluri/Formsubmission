@@ -1,5 +1,6 @@
 import { maybeAutoInitSchema, totalPoolMinutes } from "./_lib/state";
 import { getPool } from "./_lib/db";
+import { getDatabaseErrorMessage } from "./_lib/errors";
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "GET") {
@@ -22,8 +23,9 @@ export default async function handler(req: any, res: any) {
   } catch (error) {
     console.error("Health check failed:", error);
 
-    if (error instanceof Error && /DATABASE_URL is required/i.test(error.message)) {
-      return res.status(500).json({ error: "Server database is not configured. Set DATABASE_URL in Vercel environment variables." });
+    const dbErrorMessage = getDatabaseErrorMessage(error);
+    if (dbErrorMessage) {
+      return res.status(500).json({ error: dbErrorMessage });
     }
 
     return res.status(500).json({ error: "Could not read health state" });
