@@ -98,7 +98,11 @@ export default async function handler(req: any, res: any) {
     });
   } catch (error) {
     if (client) {
-      await client.query("ROLLBACK");
+      try {
+        await client.query("ROLLBACK");
+      } catch (rollbackError) {
+        console.error("Rollback failed:", rollbackError);
+      }
     }
     console.error("Submission transaction failed:", error);
 
@@ -115,7 +119,11 @@ export default async function handler(req: any, res: any) {
     return res.status(500).send("Could not save submission");
   } finally {
     if (client) {
-      client.release();
+      try {
+        client.release();
+      } catch (releaseError) {
+        console.error("Client release failed:", releaseError);
+      }
     }
   }
 }
