@@ -6,7 +6,7 @@ interface FormHeaderProps {
 }
 
 export const FormHeader = ({
-  title = "How much time do you have?",
+  title = "Our Grand Master Prabodh has taken a noble resolution to complete One Crore Hours of Meditation for World Peace 🌍 ✨Let us all participate and contribute our meditation time 🙏 You can meditate for any duration from 1 minute to 24 hours and share it daily.",
   subtitle = "Select the duration that works best for you.",
 }: FormHeaderProps) => {
   return (
