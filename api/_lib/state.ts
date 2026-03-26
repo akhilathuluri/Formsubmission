@@ -1,4 +1,4 @@
-import { getPool } from "./db";
+import { getPool } from "./db.js";
 
 const defaultTotalHours = Number(process.env.TOTAL_POOL_HOURS || 10_000_000);
 export const totalPoolMinutes = Math.max(0, Math.floor(defaultTotalHours * 60));

@@ -1,6 +1,6 @@
-import { maybeAutoInitSchema, totalPoolMinutes } from "./_lib/state";
-import { getPool } from "./_lib/db";
-import { getDatabaseErrorMessage } from "./_lib/errors";
+import { maybeAutoInitSchema, totalPoolMinutes } from "./_lib/state.js";
+import { getPool } from "./_lib/db.js";
+import { getDatabaseErrorMessage } from "./_lib/errors.js";
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "GET") {
