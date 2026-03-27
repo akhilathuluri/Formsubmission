@@ -92,10 +92,17 @@ export default async function handler(req: any, res: any) {
 
     await client.query("COMMIT");
 
+    const completedResult = await pool.query<{ completed_minutes: string }>(`
+      SELECT COALESCE(SUM(deducted_minutes), 0)::bigint AS completed_minutes
+      FROM form_submissions
+    `);
+    const timeCompletedMinutes = Number(completedResult.rows[0]?.completed_minutes ?? 0);
+
     return res.status(201).json({
       submissionId: Number(insertResult.rows[0].id),
       deductedMinutes,
       remainingMinutes: nextRemaining,
+      timeCompletedMinutes,
     });
   } catch (error) {
     if (client) {

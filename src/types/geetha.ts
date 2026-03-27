@@ -12,5 +12,6 @@ export interface GeethaSubmission {
 export interface GeethaDashboardResponse {
   totalMinutes: number;
   remainingMinutes: number;
+  timeCompletedMinutes: number;
   submissions: GeethaSubmission[];
 }

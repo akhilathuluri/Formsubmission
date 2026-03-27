@@ -5,7 +5,7 @@ interface SuccessContentProps {
   title?: string;
   message?: string;
   deductedMinutes?: number;
-  remainingMinutes?: number;
+  timeCompletedMinutes?: number;
 }
 
 const formatDuration = (minutes: number): string => {
@@ -25,9 +25,9 @@ const formatDuration = (minutes: number): string => {
 
 export const SuccessContent = ({
   title = "Thanks for your response!",
-  message = "We appreciate your feedback.",
+  message = "",
   deductedMinutes,
-  remainingMinutes,
+  timeCompletedMinutes,
 }: SuccessContentProps) => {
   return (
     <motion.div
@@ -48,16 +48,18 @@ export const SuccessContent = ({
       </h2>
       <p className="text-lg text-muted-foreground">{message}</p>
 
-      {typeof deductedMinutes === "number" && typeof remainingMinutes === "number" && (
+      {typeof deductedMinutes === "number" && (
         <div className="mt-8 grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border bg-card p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Current user added</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Your Contribution</p>
             <p className="mt-1 text-2xl font-bold text-foreground">{formatDuration(deductedMinutes)}</p>
           </div>
-          <div className="rounded-xl border bg-card p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Total remaining</p>
-            <p className="mt-1 text-2xl font-bold text-foreground">{formatDuration(remainingMinutes)}</p>
-          </div>
+          {typeof timeCompletedMinutes === "number" && (
+            <div className="rounded-xl border bg-card p-4">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Contributed Time Till Now</p>
+              <p className="mt-1 text-2xl font-bold text-foreground">{formatDuration(timeCompletedMinutes)}</p>
+            </div>
+          )}
         </div>
       )}
     </motion.div>

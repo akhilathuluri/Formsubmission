@@ -87,8 +87,8 @@ const GeethaPage = () => {
 
               <Card>
                 <CardHeader>
-                  <CardDescription>Remaining Time</CardDescription>
-                  <CardTitle>{formatDuration(data.remainingMinutes)}</CardTitle>
+                  <CardDescription>Contributed Time Till Now</CardDescription>
+                  <CardTitle>{formatDuration(data.timeCompletedMinutes)}</CardTitle>
                 </CardHeader>
               </Card>
             </div>

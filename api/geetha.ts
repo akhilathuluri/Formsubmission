@@ -40,12 +40,19 @@ export default async function handler(req: any, res: any) {
       ORDER BY created_at DESC
     `);
 
+    const completedResult = await pool.query<{ completed_minutes: string }>(`
+      SELECT COALESCE(SUM(deducted_minutes), 0)::bigint AS completed_minutes
+      FROM form_submissions
+    `);
+
     const totalMinutes = Number(stateResult.rows[0]?.total_minutes ?? totalPoolMinutes);
     const remainingMinutes = Number(stateResult.rows[0]?.remaining_minutes ?? totalPoolMinutes);
+    const timeCompletedMinutes = Number(completedResult.rows[0]?.completed_minutes ?? 0);
 
     return res.status(200).json({
       totalMinutes,
       remainingMinutes,
+      timeCompletedMinutes,
       submissions: submissionsResult.rows.map((row) => ({
         id: Number(row.id),
         selectedOptionIds: row.selected_option_ids,

@@ -25,6 +25,12 @@ const FormPage = () => {
   return (
     <div className="min-h-screen home-bg-image">
       <div className="min-h-screen flex flex-col justify-center max-w-2xl mx-auto px-6 py-16">
+        <img
+          src="/images/logo.png"
+          alt="Geetha logo"
+          className="mx-auto mb-8 h-auto w-full max-w-[200px] sm:max-w-[240px]"
+          loading="eager"
+        />
         <AnimatePresence mode="wait">
           {status !== "success" ? (
             <motion.div
@@ -70,7 +76,7 @@ const FormPage = () => {
             <SuccessContent
               key="success"
               deductedMinutes={submissionSummary?.deductedMinutes}
-              remainingMinutes={submissionSummary?.remainingMinutes}
+              timeCompletedMinutes={submissionSummary?.timeCompletedMinutes}
             />
           )}
         </AnimatePresence>

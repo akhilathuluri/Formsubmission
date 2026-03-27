@@ -26,7 +26,7 @@ export const HOURS_SHORT_OPTIONS: TimeOption[] = Array.from({ length: 12 }, (_, 
     id: `${hours}hr`,
     label: `${hours} hour${hours > 1 ? "s" : ""}`,
     desc: "",
-    category: "hours-short",
+    category: "hours",
     duration: hours * 60,
   };
 });
@@ -37,7 +37,7 @@ export const HOURS_LONG_OPTIONS: TimeOption[] = Array.from({ length: 12 }, (_, i
     id: `${hours}hr`,
     label: `${hours} hours`,
     desc: "",
-    category: "hours-long",
+    category: "hours",
     duration: hours * 60,
   };
 });
@@ -61,7 +61,6 @@ export const getSelectedTotalMinutes = (selectedIds: Iterable<string>): number =
 };
 
 export const TIME_OPTION_GROUPS = [
-  { label: "Minutes", options: MINUTES_OPTIONS },
-  { label: "Hours (1-12)", options: HOURS_SHORT_OPTIONS },
-  { label: "Hours (13-24)", options: HOURS_LONG_OPTIONS },
+  { label: "Minutes (1-55)", options: MINUTES_OPTIONS },
+  { label: "Hours (1-24)", options: [...HOURS_SHORT_OPTIONS, ...HOURS_LONG_OPTIONS] },
 ];

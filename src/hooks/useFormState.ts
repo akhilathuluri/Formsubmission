@@ -1,13 +1,14 @@
 import { useState, useCallback } from "react";
 import { FormStatus } from "@/types/form";
 import confetti from "canvas-confetti";
-import { getSelectedTotalMinutes } from "@/config/timeOptions";
+import { getSelectedTotalMinutes, TIME_OPTION_BY_ID } from "@/config/timeOptions";
 import { submitForm } from "@/services/submissionApi";
 import { toast } from "sonner";
 
 type SubmissionSummary = {
   deductedMinutes: number;
   remainingMinutes: number;
+  timeCompletedMinutes: number;
 };
 
 export const useFormState = () => {
@@ -21,9 +22,19 @@ export const useFormState = () => {
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
-      } else {
-        next.add(id);
+        return next;
       }
+
+      const selectedCategory = TIME_OPTION_BY_ID[id]?.category;
+      if (selectedCategory) {
+        for (const selectedId of next) {
+          if (TIME_OPTION_BY_ID[selectedId]?.category === selectedCategory) {
+            next.delete(selectedId);
+          }
+        }
+      }
+
+      next.add(id);
       return next;
     });
   }, [status]);
@@ -62,6 +73,7 @@ export const useFormState = () => {
         setSubmissionSummary({
           deductedMinutes: result.deductedMinutes,
           remainingMinutes: result.remainingMinutes,
+          timeCompletedMinutes: result.timeCompletedMinutes,
         });
         setStatus("success");
         celebrate();

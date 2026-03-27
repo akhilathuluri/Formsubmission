@@ -9,6 +9,7 @@ export interface SubmitResponse {
   submissionId: number;
   deductedMinutes: number;
   remainingMinutes: number;
+  timeCompletedMinutes: number;
 }
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, "") ?? "";
