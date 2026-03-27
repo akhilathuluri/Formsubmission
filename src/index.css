@@ -92,6 +92,15 @@
 }
 
 @layer utilities {
+  .home-bg-image {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.78)),
+      url('');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
   .text-highlight {
     @apply relative inline-block;
   }

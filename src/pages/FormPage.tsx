@@ -23,7 +23,7 @@ const FormPage = () => {
   const { selected, status, submissionSummary, toggle, handleSubmit } = useFormState();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen home-bg-image">
       <div className="min-h-screen flex flex-col justify-center max-w-2xl mx-auto px-6 py-16">
         <AnimatePresence mode="wait">
           {status !== "success" ? (
@@ -33,6 +33,7 @@ const FormPage = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="rounded-2xl bg-background/85 backdrop-blur-sm p-6 sm:p-8"
             >
               <FormHeader />
 

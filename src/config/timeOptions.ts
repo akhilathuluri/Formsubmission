@@ -4,7 +4,7 @@ export const MINUTES_OPTIONS: TimeOption[] = [
   {
     id: "1min",
     label: "1 minute",
-    desc: "Quick task",
+    desc: "",
     category: "minutes",
     duration: 1,
   },
@@ -13,7 +13,7 @@ export const MINUTES_OPTIONS: TimeOption[] = [
     return {
       id: `${minutes}min`,
       label: `${minutes} minutes`,
-      desc: "Short duration task",
+      desc: "",
       category: "minutes",
       duration: minutes,
     };
@@ -25,7 +25,7 @@ export const HOURS_SHORT_OPTIONS: TimeOption[] = Array.from({ length: 12 }, (_, 
   return {
     id: `${hours}hr`,
     label: `${hours} hour${hours > 1 ? "s" : ""}`,
-    desc: "Medium duration task",
+    desc: "",
     category: "hours-short",
     duration: hours * 60,
   };
@@ -36,7 +36,7 @@ export const HOURS_LONG_OPTIONS: TimeOption[] = Array.from({ length: 12 }, (_, i
   return {
     id: `${hours}hr`,
     label: `${hours} hours`,
-    desc: "Extended duration task",
+    desc: "",
     category: "hours-long",
     duration: hours * 60,
   };

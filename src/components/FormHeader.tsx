@@ -11,11 +11,19 @@ export const FormHeader = ({
 }: FormHeaderProps) => {
   return (
     <>
+      <motion.h2
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45 }}
+        className="mx-auto max-w-3xl text-left text-2xl sm:text-2xl font-extrabold tracking-tight text-black mb-3"
+      >
+        <span className="text-black">Koti Gantala Ekathva Vishwashanti Dhyana Yagnam</span>
+      </motion.h2>
       <motion.h1
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground mb-3"
+        className="mx-auto max-w-3xl text-justify text-base sm:text-lg font-medium tracking-normal leading-relaxed text-foreground mb-3"
       >
         {title}
       </motion.h1>
@@ -23,7 +31,7 @@ export const FormHeader = ({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="text-lg text-muted-foreground mb-12"
+        className="mx-auto max-w-3xl text-justify text-lg text-muted-foreground mb-12"
       >
         {subtitle}
       </motion.p>
