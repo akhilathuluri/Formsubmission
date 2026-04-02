@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { FormStatus } from "@/types/form";
 import confetti from "canvas-confetti";
-import { getSelectedTotalMinutes, TIME_OPTION_BY_ID } from "@/config/timeOptions";
+import { TIME_OPTION_BY_ID } from "@/config/timeOptions";
 import { submitForm } from "@/services/submissionApi";
 import { toast } from "sonner";
 
@@ -11,7 +11,27 @@ type SubmissionSummary = {
   timeCompletedMinutes: number;
 };
 
-export const useFormState = () => {
+type OptionConfig = {
+  duration: number;
+  category?: string;
+};
+
+type UseFormStateOptions = {
+  optionById?: Record<string, OptionConfig>;
+};
+
+const getSelectedTotalMinutes = (
+  selectedIds: Iterable<string>,
+  optionById: Record<string, OptionConfig>,
+): number => {
+  let total = 0;
+  for (const id of selectedIds) {
+    total += optionById[id]?.duration ?? 0;
+  }
+  return total;
+};
+
+export const useFormState = ({ optionById = TIME_OPTION_BY_ID }: UseFormStateOptions = {}) => {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [status, setStatus] = useState<FormStatus>("idle");
   const [submissionSummary, setSubmissionSummary] = useState<SubmissionSummary | null>(null);
@@ -25,10 +45,10 @@ export const useFormState = () => {
         return next;
       }
 
-      const selectedCategory = TIME_OPTION_BY_ID[id]?.category;
+      const selectedCategory = optionById[id]?.category;
       if (selectedCategory) {
         for (const selectedId of next) {
-          if (TIME_OPTION_BY_ID[selectedId]?.category === selectedCategory) {
+          if (optionById[selectedId]?.category === selectedCategory) {
             next.delete(selectedId);
           }
         }
@@ -37,7 +57,7 @@ export const useFormState = () => {
       next.add(id);
       return next;
     });
-  }, [status]);
+  }, [status, optionById]);
 
   const celebrate = useCallback(() => {
     const defaults = {
@@ -60,7 +80,7 @@ export const useFormState = () => {
       if (selected.size === 0) return;
 
       const selectedOptionIds = Array.from(selected);
-      const requestedMinutes = getSelectedTotalMinutes(selectedOptionIds);
+      const requestedMinutes = getSelectedTotalMinutes(selectedOptionIds, optionById);
       if (requestedMinutes <= 0) {
         toast.error("Please select a valid time option.");
         return;
@@ -86,7 +106,7 @@ export const useFormState = () => {
     };
 
     void submit();
-  }, [selected, celebrate]);
+  }, [selected, celebrate, optionById]);
 
   const reset = useCallback(() => {
     setSelected(new Set());

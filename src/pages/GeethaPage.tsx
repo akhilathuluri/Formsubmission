@@ -42,6 +42,38 @@ const formatDateTime = (isoDate: string): string => {
   }).format(date);
 };
 
+const formatTotalHours = (minutes: number): string => {
+  const totalHours = Math.floor(Math.max(0, minutes) / 60);
+  return `${totalHours} hrs`;
+};
+
+const formatContributedHours = (minutes: number): string => {
+  const safeMinutes = Math.max(0, Math.floor(minutes));
+  const hours = Math.floor(safeMinutes / 60);
+  const rest = safeMinutes % 60;
+
+  if (rest === 0) {
+    return `${hours} hrs`;
+  }
+
+  return `${hours} hrs ${rest} min`;
+};
+
+const formatHoursLeft = (minutes: number): string => {
+  const hours = Math.max(0, minutes) / 60;
+  return `${hours.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })} hrs`;
+};
+
+const formatHoursLeftDetailed = (minutes: number): string => {
+  const safeMinutes = Math.max(0, Math.floor(minutes));
+  const hours = Math.floor(safeMinutes / 60);
+  const rest = safeMinutes % 60;
+  return `${hours.toLocaleString()} hrs ${rest} min`;
+};
+
 const GeethaPage = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["geetha-dashboard"],
@@ -77,18 +109,28 @@ const GeethaPage = () => {
 
         {data && (
           <>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Card>
                 <CardHeader>
                   <CardDescription>Total Time</CardDescription>
-                  <CardTitle>{formatDuration(data.totalMinutes)}</CardTitle>
+                  <CardTitle>{formatTotalHours(data.totalMinutes)}</CardTitle>
                 </CardHeader>
               </Card>
 
               <Card>
                 <CardHeader>
                   <CardDescription>Contributed Time Till Now</CardDescription>
-                  <CardTitle>{formatDuration(data.timeCompletedMinutes)}</CardTitle>
+                  <CardTitle>{formatContributedHours(data.timeCompletedMinutes)}</CardTitle>
+                </CardHeader>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardDescription>Hours Left</CardDescription>
+                  <CardTitle>{formatHoursLeft(data.remainingMinutes)}</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    {formatHoursLeftDetailed(data.remainingMinutes)}
+                  </p>
                 </CardHeader>
               </Card>
             </div>
